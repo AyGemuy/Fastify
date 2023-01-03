@@ -1,6 +1,5 @@
 // Require the framework and instantiate it
 require('dotenv').config()
-// const fastify = require('fastify')({ logger: true })
 
 const envToLogger = {
     development: {
