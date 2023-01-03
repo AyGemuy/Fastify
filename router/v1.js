@@ -26,18 +26,18 @@ async function info (request, reply) {
 async function connections (request, reply) {
     const { lsof} = require('list-open-files')
     const [ con ] = await lsof()
-    let conPid = con.files.filter(file => file.type === 'IP')
-    console.log(conPid)
+    const cons = con.files.filter(file => file.type === 'IP')
+    cons.forEach(file => console.log(file))
     let result = []
-    for (const pid of conPid) {
+    cons.forEach(c => {
         result.push({
-            id: pid.fd,
-            protocol: pid.protocol,
-            type: pid.from ? 'ESTABLISHED' : 'LISTENING',
-            local: pid.from ? pid.from.address + ':' + pid.from.port : "0.0.0.0:0",
-            remote: pid.to.address + ':' + pid.to.port
+            id: c.fd,
+            protocol: c.protocol,
+            type: c.from ? 'ESTABLISHED' : 'LISTENING',
+            local: c.from ? c.from.address + ':' + c.from.port : "0.0.0.0:0",
+            remote: c.to.address + ':' + c.to.port
         })
-    }
+    })
     reply.send({connections: result})
 }
 
