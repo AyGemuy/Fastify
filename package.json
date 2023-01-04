@@ -1,14 +1,21 @@
 {
+	"type": "module",
 	"dependencies": {
 		"dotenv": "^16.0.3",
 		"fastify": "^4.11.0",
 		"fastify-plugin": "^4.4.0",
-		"list-open-files": "^1.1.0"
+		"list-open-files": "^1.1.0",
+		"sequelize": "^6.28.0",
+		"sqlite3": "^5.1.4"
 	},
 	"scripts": {
 		"app": "node index.js"
 	},
 	"devDependencies": {
 		"pino-pretty": "^9.1.1"
+	},
+	"engines": {
+		"node": ">=18",
+		"pnpm": ">=7"
 	}
 }

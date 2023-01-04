@@ -1,5 +1,9 @@
 // Require the framework and instantiate it
-require('dotenv').config()
+import * as process from 'node:process';
+import { config } from "dotenv";
+config()
+import Fastify from "fastify";
+import routes from "./router/routes.js";
 
 const envToLogger = {
     development: {
@@ -16,12 +20,12 @@ const envToLogger = {
     test: false,
 }
 
-const fastify = require('fastify')({
+const fastify = Fastify({
     logger: envToLogger['development'] ?? true
 })
 
 fastify
-    .register(require('./router/routes'))
+    .register(routes)
     .addHook('onSend', (request, reply, payload, done) => {
         reply.header('Server', 'Fastify')
         done(null, payload)
@@ -33,8 +37,8 @@ const start = async () => {
         await fastify
             .listen({ host: process.env.ADDRESS, port: process.env.PORT || 3000 })
     } catch (err) {
-        fastify.log.transport(err)
+        fastify.log.error(err)
         process.exit(1)
     }
 }
-start().then(r => console.log('Server started'))
+start().then(r => fastify.log.info('Server started'))

@@ -1,3 +1,7 @@
+import * as process from 'node:process';
+import { execSync } from 'node:child_process'
+import { lsof } from "list-open-files";
+
 async function ping (request, reply) {
     reply.send({
         agent: await request.headers['user-agent'],
@@ -8,9 +12,7 @@ async function ping (request, reply) {
 
 
 async function info (request, reply) {
-    let gitHash = require('child_process')
-        .execSync('git rev-parse HEAD')
-        .toString().trim().slice(0, 7)
+    let gitHash = execSync('git rev-parse HEAD').toString().trim().slice(0, 7)
     reply.send({
         project: {
             name: process.env.NAME,
@@ -24,7 +26,6 @@ async function info (request, reply) {
 }
 
 async function connections (request, reply) {
-    const { lsof } = require('list-open-files')
     const [ con ] = await lsof()
     const cons = con.files.filter(file => file.type === 'IP')
     cons.forEach(file => console.log(file))
@@ -48,4 +49,4 @@ async function v1 (fastify, options) {
     fastify.get('/connections', connections)
 }
 
-module.exports = v1
+export default v1
