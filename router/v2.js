@@ -26,8 +26,9 @@ const schema = {
 
 
 async function findId(request) {
+
     switch (true) {
-        case request.body !== undefined:
+        case request.body !== undefined && request.body.id !== undefined:
             return request.body.id
         case request.params.id !== undefined:
             return request.params.id

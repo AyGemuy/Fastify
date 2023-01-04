@@ -47,6 +47,18 @@ async function v1 (fastify, options) {
     fastify.get('/ping', ping)
     fastify.get('/info', info)
     fastify.get('/connections', connections)
+    fastify.get('/', async (request, reply) => {
+        reply.header('Location', '/api/v1/info')
+            .status(301)
+            .send({message: 'Redirecting to /api/v1/info'})
+    })
+    fastify.route({
+        method: ['POST', 'PUT', 'DELETE'],
+        url: options.url || '/ping',
+        handler: async (request, reply) => {
+            reply.code(405).send({message: 'Method not allowed'})
+        }
+    })
 }
 
 export default v1
