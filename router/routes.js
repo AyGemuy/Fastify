@@ -1,5 +1,4 @@
 import fp from "fastify-plugin"
-
 import v1 from "./v1.js"
 import v2 from "./v2.js";
 
@@ -10,9 +9,8 @@ export default fp(async function routes (app, opts) {
     app.register(v2, {
         prefix: '/api/v2',
     })
-    app.addHook('onSend', (request, reply, payload, done) => {
+    app.addHook('onSend', async (request, reply, payload) => {
         reply.header('Content-Type', 'application/json')
-        done(null, payload)
     })
 }, {
     name: 'routes'

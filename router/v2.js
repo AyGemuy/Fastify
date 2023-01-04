@@ -16,7 +16,7 @@ const schema = {
             id: {type: 'integer', maximum: 20}
         }
     },
-    query: {
+    querystring: {
         type: 'object',
         properties: {
             id: {type: 'integer', maximum: 20}
@@ -24,6 +24,19 @@ const schema = {
     }
 }
 
+
+async function findId(request) {
+    switch (true) {
+        case request.body !== undefined:
+            return request.body.id
+        case request.params.id !== undefined:
+            return request.params.id
+        case request.query.id !== undefined:
+            return request.query.id
+        default:
+            return undefined
+    }
+}
 
 async function getCars(request, reply) {
     const id = request.params.id
@@ -46,10 +59,7 @@ async function createCar(request, reply) {
 }
 
 async function updateCar(request, reply) {
-    const id = request.body.id !== undefined ? request.body.id
-        : request.params.id !== undefined ? request.params.id
-            : request.query.id !== undefined ? request.query.id
-                : undefined
+    const id = await findId(request)
     const car = await Car.findByPk(id)
     if (!car) {
         reply.code(404).send({message: 'Car not found'})
@@ -60,9 +70,7 @@ async function updateCar(request, reply) {
 }
 
 async function deleteCar(request, reply) {
-    const id = request.params.id !== undefined ? request.params.id
-        : request.query.id !== undefined ? request.query.id
-            : undefined
+    const id = await findId(request)
     const car = await Car.findByPk(id)
     if (!car) {
         reply.code(404).send({message: 'Car not found'})
@@ -73,28 +81,29 @@ async function deleteCar(request, reply) {
 }
 
 async function v2 (fastify, options) {
+    fastify.addHook('onReady', async () => {await dbInit().then(r => fastify.log.info('Database initialized'))})
     fastify.get('/cars', getCars)
 
     fastify.get('/cars/:id', {schema: schema.params}, getCars)
 
     fastify.post('/cars', { schema: schema.body, onRequest: async (request, reply) => {
-        await Car.count() >= 20 ? await dbInit()
-            .then(() => fastify.log.warn('Maximum Reach Db Resetting')) : null
-    }}, createCar)
+        if (await Car.count() >= 20) {
+            await dbInit().then(() => fastify.log.warn('Maximum Reach Db Resetting'))
+        }}}, createCar)
 
-    fastify.put('/cars', { schema: schema.query }, updateCar)
+    fastify.put('/cars', { schema: schema.querystring }, updateCar)
 
     fastify.put('/cars/:id(^\\d+)', { schema: schema.params }, updateCar)
 
-    fastify.delete('/cars', { schema: schema.query, onSend: async (request, reply) => {
-            await Car.count() <= 6 ? await dbInit()
-                .then(() => fastify.log.warn('Minimum Reach Db Resetting')) : null
-        }}, deleteCar)
+    fastify.delete('/cars', { schema: schema.querystring, onResponse: async (request, reply) => {
+            if (await Car.count() <= 6) {
+                await dbInit().then(() => fastify.log.warn('Minimum Reach Db Resetting'))
+            }}}, deleteCar)
 
-    fastify.delete('/cars/:id(^\\d+)', { schema: schema.params, onSend: async (request, reply) => {
-            await Car.count() <= 6 ? await dbInit()
-                .then(() => fastify.log.warn('Minimum Reach Db Resetting')) : null
-        }}, deleteCar)
+    fastify.delete('/cars/:id(^\\d+)', { schema: schema.params, onResponse: async (request, reply) => {
+            if (await Car.count() <= 6) {
+                await dbInit().then(() => fastify.log.warn('Minimum Reach Db Resetting'))
+            }}}, deleteCar)
 }
 
 export default v2

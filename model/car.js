@@ -1,6 +1,6 @@
-import {DataTypes, Sequelize} from 'sequelize';
+import { DataTypes, Sequelize } from 'sequelize'
 
-const sequelize = new Sequelize('sqlite::memory:');
+const sequelize = new Sequelize('sqlite::memory:')
 const Car = sequelize.define('Car', {
     name: {
         type: DataTypes.STRING,
@@ -34,7 +34,5 @@ async function dbInit() {
         ], {validate: true})
     )
 }
-
-await dbInit()
 
 export { Car, dbInit }

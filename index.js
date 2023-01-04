@@ -26,9 +26,8 @@ const fastify = Fastify({
 
 fastify
     .register(routes)
-    .addHook('onSend', (request, reply, payload, done) => {
+    .addHook('onSend', async (request, reply, payload) => {
         reply.header('Server', 'Fastify')
-        done(null, payload)
     })
 
 // Run the server!
