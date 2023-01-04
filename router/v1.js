@@ -24,7 +24,7 @@ async function info (request, reply) {
 }
 
 async function connections (request, reply) {
-    const { lsof} = require('list-open-files')
+    const { lsof } = require('list-open-files')
     const [ con ] = await lsof()
     const cons = con.files.filter(file => file.type === 'IP')
     cons.forEach(file => console.log(file))
