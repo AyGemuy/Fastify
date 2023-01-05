@@ -1,6 +1,8 @@
 {
 	"type": "module",
 	"dependencies": {
+		"@fastify/multipart": "^7.3.0",
+		"bcrypt": "^5.1.0",
 		"dotenv": "^16.0.3",
 		"fastify": "^4.11.0",
 		"fastify-plugin": "^4.4.0",
