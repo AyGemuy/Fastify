@@ -26,7 +26,7 @@ const User = sequelize.define('User', {
 
 
 async function dbInit() {
-    await sequelize.sync({force: true}).then(() =>
+    await sequelize.sync({force: true}).then(async () =>
         User.create(
             {username: 'admin', password: 'password'},
         )

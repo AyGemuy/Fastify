@@ -1,4 +1,4 @@
-import * as process from 'node:process';
+import { env } from 'node:process';
 import { execSync } from 'node:child_process'
 import { lsof } from "list-open-files";
 
@@ -15,12 +15,12 @@ async function info (request, reply) {
     let gitHash = execSync('git rev-parse HEAD').toString().trim().slice(0, 7)
     reply.send({
         project: {
-            name: process.env.NAME,
-            description: process.env.DESCRIPTION,
-            language: process.env.LANGUAGE,
-            url: process.env.URL,
+            name: env.NAME,
+            description: env.DESCRIPTION,
+            language: env.LANGUAGE,
+            url: env.URL,
             "git hash": gitHash,
-            version: process.env.VERSION
+            version: env.VERSION
         }
     })
 }
@@ -48,7 +48,7 @@ async function v1 (fastify, options) {
     fastify.get('/info', info)
     fastify.get('/connections', connections)
     fastify.get('/', async (request, reply) => {
-        reply.header('Location', '/api/v1/info')
+        reply.header('Location', request.url + 'info')
             .status(301)
             .send({message: 'Redirecting to /api/v1/info'})
     })
