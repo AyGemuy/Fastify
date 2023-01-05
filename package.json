@@ -13,7 +13,7 @@
 		"sqlite3": "^5.1.4"
 	},
 	"scripts": {
-		"app": "node index.js"
+		"start": "node server.js"
 	},
 	"devDependencies": {
 		"pino-pretty": "^9.1.1"

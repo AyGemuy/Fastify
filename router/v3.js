@@ -19,7 +19,6 @@ const myCustomMessages = {
     badRequestErrorMessage: '[v3] -> Format is Authorization: Bearer [token]',
     noAuthorizationInHeaderMessage: '[v3] -> Authorization header is missing!',
     authorizationTokenExpiredMessage: '[v3] -> Authorization token expired',
-    // for the below message you can pass a sync function that must return a string as shown or a string
     authorizationTokenInvalid: (err) => {
         return `Authorization token is invalid: ${err.message}`
     }
