@@ -51,7 +51,7 @@ jobs:
         
       - name: Run Api
         run: pnpm run start &
-      - name: Install Postman CLI MacOS
+      - name: Install Postman
         run: |
           curl -o- ${{matrix.postman-cli}} | sh
       - name: Login to Postman CLI
