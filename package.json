@@ -1,22 +1,22 @@
 {
 	"type": "module",
 	"dependencies": {
-		"@fastify/jwt": "^6.5.0",
-		"@fastify/multipart": "^7.3.0",
-		"bcrypt": "^5.1.0",
-		"dotenv": "^16.0.3",
-		"fastify": "^4.11.0",
-		"fastify-plugin": "^4.4.0",
+		"@fastify/jwt": "^7.2.4",
+		"@fastify/multipart": "^8.0.0",
+		"bcrypt": "^5.1.1",
+		"dotenv": "^16.3.1",
+		"fastify": "^4.24.3",
+		"fastify-plugin": "^4.5.1",
 		"list-open-files": "^1.1.0",
-		"nanoid": "^4.0.0",
-		"sequelize": "^6.28.0",
-		"sqlite3": "^5.1.4"
+		"nanoid": "^5.0.3",
+		"sequelize": "^6.35.1",
+		"sqlite3": "^5.1.6"
 	},
 	"scripts": {
 		"start": "node server.js"
 	},
 	"devDependencies": {
-		"pino-pretty": "^9.1.1"
+		"pino-pretty": "^10.2.3"
 	},
 	"engines": {
 		"node": ">=18",
