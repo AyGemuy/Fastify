@@ -5,7 +5,7 @@ import { lsof } from "list-open-files";
 async function ping (request, reply) {
     reply.send({
         agent: await request.headers['user-agent'],
-        date: new Date().toUTCString(),
+        datetime: new Date().toUTCString(),
         message: 'pong'
     })
 }
@@ -36,7 +36,7 @@ async function connections (request, reply) {
             protocol: c.protocol,
             type: c.from ? 'ESTABLISHED' : 'LISTENING',
             local: c.from ? c.from.address + ':' + c.from.port : "0.0.0.0:0",
-            remote: c.to.address + ':' + c.to.port
+            remote: c.to.address === "*" ? "0.0.0.0:0000" : c.to.address + ':' + c.to.port
         })
     })
     reply.send({connections: result})
